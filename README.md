@@ -1,2 +1,2 @@
 # GeekChat
-FanClub Portal for all the nerds out there.
+Get your Geek on bois!
