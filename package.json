@@ -1,0 +1,39 @@
+{
+  "dependencies": {
+    "@babel/cli": "^7.13.0",
+    "@babel/core": "^7.13.8",
+    "@babel/node": "^7.13.0",
+    "apollo-server-express": "^2.21.0",
+    "body-parser": "^1.19.0",
+    "core-js": "^2.6.12",
+    "express": "^4.17.1",
+    "graphql": "^15.5.0",
+    "graphql-tools": "^7.0.4",
+    "nodemon": "^2.0.7",
+    "pg": "^8.5.1",
+    "pg-hstore": "^2.3.3",
+    "sequelize": "^6.5.0"
+  },
+  "name": "geekchat",
+  "description": "Get your Geek on bois!",
+  "version": "1.0.0",
+  "main": "index.js",
+  "devDependencies": {
+    "@babel/preset-env": "^7.13.9"
+  },
+  "scripts": {
+    "start": "nodemon --exec babel-node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Lavcodes/GeekChat.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Lavcodes/GeekChat/issues"
+  },
+  "homepage": "https://github.com/Lavcodes/GeekChat#readme"
+}
