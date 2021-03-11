@@ -11,7 +11,11 @@ export default (sequelize, DataTypes) => {
         through: 'member',
         foreignKey: 'channel_id',
       });
-    };
+      Channel.belongsTo(models.user, {
+        foreignKey: 'admin',
+      });
+    
+  };
   
     return Channel;
   };

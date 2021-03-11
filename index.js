@@ -1,25 +1,45 @@
 import express from 'express';
-import { ApolloServer, gql } from 'apollo-server-express'; 
+import { ApolloServer, gql, makeExecutableSchema } from 'apollo-server-express'; 
 
-import typeDefs from './schema';
-import resolvers from './resolvers';
 import models from './models';
 import {sequelize} from './models';
+import { loadFilesSync } from '@graphql-tools/load-files';
+import { mergeTypeDefs, mergeResolvers } from '@graphql-tools/merge';
+const path= require('path');
 
-export const schema = new ApolloServer({
+const types=loadFilesSync(path.join(__dirname, './schema'));
+const typeDefs= mergeTypeDefs(types);
+const resolvers=mergeResolvers(loadFilesSync(path.join(__dirname, './resolvers')));
+
+ const schema = makeExecutableSchema({
     typeDefs,
     resolvers,
 });
 
-
 const PORT = 8081;
 const app = express();
-schema.applyMiddleware({app});
-// bodyParser is needed just for POST.
-
+const server = new ApolloServer({
+    typeDefs,
+    resolvers,
+    context :{models}
+});
+  
+  server.applyMiddleware({ app });
+  
+  app.use((req, res) => {
+    res.status(200);
+    //res.send('Hello!');
+    res.end();
+  });
+  
 sequelize.sync().then(()=>{
-    console.log("done");
+    console.log("im done");
     app.listen(8081);
 });
 
-//app.listen(PORT);
+//schema.applyMiddleware({app});
+// bodyParser is needed just for POST.
+
+
+
+
