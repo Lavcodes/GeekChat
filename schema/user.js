@@ -7,12 +7,20 @@ type User {
     password: String!
     channels : [Channel!]!
   }
+
   type Query{
       getUser(id: Int!) : User!
       allUsers :[User!]!
   }
+  
+  type RegisterResponse {
+      ok : Boolean!
+      user : User
+      errors : [Error!]
+  }
+
   type Mutation {
-      Register(username : String! , email : String! , password : String!) : Boolean!
+      Register(username : String! , email : String! , password : String!) : RegisterResponse!
   }
 
 `
