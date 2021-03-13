@@ -5,6 +5,7 @@ import models from './models';
 import {sequelize} from './models';
 import { loadFilesSync } from '@graphql-tools/load-files';
 import { mergeTypeDefs, mergeResolvers } from '@graphql-tools/merge';
+import cors from 'cors';
 const path= require('path');
 
 const types=loadFilesSync(path.join(__dirname, './schema'));
@@ -25,7 +26,9 @@ const server = new ApolloServer({
 });
   
   server.applyMiddleware({ app });
-  
+
+  app.use(cors('*'));
+
   app.use((req, res) => {
     res.status(200);
     //res.send('Hello!');
