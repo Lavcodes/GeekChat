@@ -12,6 +12,9 @@ const types=loadFilesSync(path.join(__dirname, './schema'));
 const typeDefs= mergeTypeDefs(types);
 const resolvers=mergeResolvers(loadFilesSync(path.join(__dirname, './resolvers')));
 
+const SECRET = 'asecetforjwt1234458b';
+const SECRET2 = 'asecondseretforjwttokens125789bjhk';
+
  const schema = makeExecutableSchema({
     typeDefs,
     resolvers,
@@ -22,7 +25,7 @@ const app = express();
 const server = new ApolloServer({
     typeDefs,
     resolvers,
-    context :{models}
+    context :{models, SECRET, SECRET2}
 });
   
   server.applyMiddleware({ app });

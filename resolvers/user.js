@@ -1,7 +1,8 @@
 import bcrypt from 'bcrypt';
 //import { _ } from 'core-js';
 import _ from 'lodash';
-import {ValidationError} from 'sequelize'
+import {ValidationError} from 'sequelize';
+import {tryLogin} from '../auth';
 
 const formatErrors = (e, models) => {
     if(e instanceof ValidationError){
@@ -18,6 +19,14 @@ export default{
 
     },
     Mutation: {
+        Login : async (parent, {email, password}, {models,SECRET}) => {
+            try {
+               return tryLogin(email, password, models, SECRET);
+            }catch{
+                console.log(err);
+            }
+
+        },
         Register : async (parent,{password, ...otherArgs}, {models}) => {
             
 
