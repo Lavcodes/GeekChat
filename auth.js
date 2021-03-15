@@ -65,7 +65,7 @@ export const tryLogin = async (email, password, models, SECRET, SECRET2) => {
     // user with provided email not found
     return {
       ok: false,
-      errors: [{ path: 'email', message: 'No regitered user with the given email id.' }],
+      errors: [{ path: 'email', message: 'No registered user with the given email id.' }],
     };
   }
 
