@@ -12,7 +12,11 @@ type Channel{
       allChannels :[Channel!]!
   }
 
+type createChannelResponse {
+    ok: Boolean!
+    errors: [Error!]
+}
 type Mutation{
-    createChannel( channelname: String!) : Boolean!
+    createChannel( channelname: String!) : createChannelResponse!
 }
 `

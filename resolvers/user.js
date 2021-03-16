@@ -3,16 +3,16 @@ import bcrypt from 'bcrypt';
 import _ from 'lodash';
 import {ValidationError} from 'sequelize';
 import {tryLogin} from '../auth';
-
-const formatErrors = (e, models) => {
+const formatErr = (e, models)=> {
     if(e instanceof ValidationError){
         return e.errors.map(x=> _.pick(x, ['path', 'message']));
     }
-    
+    //console.log(e.errors);
     return [{path :'name', message: 'Something unexpected went wrong.'}];
 };
 
 export default{
+
     Query: {
         getUser : (parent, {id}, {models}) => models.user.findOne({where :{id} }),
         allUsers : (parent, args, { models }) => models.user.findAll(),
@@ -41,7 +41,7 @@ export default{
                 //console.log(err);
                 return {
                     ok:false, 
-                    errors : formatErrors(err, models),
+                    errors : formatErr(err, models),
                 };
             }
         } 
