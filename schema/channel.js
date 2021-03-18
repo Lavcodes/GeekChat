@@ -3,7 +3,7 @@ export default gql`
 type Channel{
     id: Int!
     channelname: String!
-    admin: User
+    admin: User!
     messages: [Message!]!
     users: [User!]!
   }

@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import {ValidationError} from 'sequelize';
+import {requiresAuth} from '../permissions';
 const formatErr = (e, models)=> {
     if(e instanceof ValidationError){
         return e.errors.map(x=> _.pick(x, ['path', 'message']));
@@ -15,7 +16,7 @@ export default{
 
     },
     Mutation: {
-        createChannel : async (parent, args, {models, user}) => {
+        createChannel : requiresAuth.createResolver(async (parent, args, {models, user}) => {
             try{
                 if(user==null) console.log("prob");
                 //console.log(user.id);
@@ -31,7 +32,7 @@ export default{
                     errors : formatErr(err, models),
                 };
             }
-        }
+        }),
     },
 
 
