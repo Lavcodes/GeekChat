@@ -12,9 +12,14 @@ const formatErr = (e, models)=> {
 export default{
     Query: {
         getChannel : (parent, {id}, {models}) => models.channel.findOne({where :{id} }),
-        allChannels : (parent, args, { models }) => models.channel.findAll(),
+        allChannels : //requiresAuth.createResolver(
 
-    },
+            async(parent, args, { models, user }) => models.channel.findAll({where:{
+                admin: user.id
+            }}, {raw:true}),
+
+    //),
+        },
     Mutation: {
         createChannel : requiresAuth.createResolver(async (parent, args, {models, user}) => {
             try{
