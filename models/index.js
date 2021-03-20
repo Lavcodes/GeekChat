@@ -2,6 +2,7 @@ import {Sequelize, DataTypes} from 'sequelize';
 import User from './user';
 import Message from './message';
 import Channel from './channel';
+import Member from './member';
 
 const sequelize = new Sequelize('geekchat', 'postgres', 'postgres', {
     dialect: 'postgres',
@@ -15,6 +16,7 @@ const models ={
   user : User(sequelize, Sequelize),
   message: Message(sequelize, Sequelize),
   channel : Channel(sequelize, Sequelize),
+  member : Member(sequelize, Sequelize),
  // Message : require('./message'),
 
 };

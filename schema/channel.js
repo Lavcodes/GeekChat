@@ -16,7 +16,14 @@ type createChannelResponse {
     ok: Boolean!
     errors: [Error!]
 }
+
+type VoidResponse {
+    ok:Boolean!
+    errors:[Error!]
+}
+
 type Mutation{
     createChannel( channelname: String!) : createChannelResponse!
+    addChannelMember (email:String!, channel_id: Int!) : VoidResponse!
 }
 `

@@ -55,10 +55,10 @@ const server = new ApolloServer({
     resolvers,
     context :async ({req}) => {
       return{models,
-     // user:req.user,
-     user:{
-       id:18,
-     },
+      user:req.user,
+       /*user:{
+         id:1,
+       },*/
        SECRET,
        SECRET2,
       };

@@ -8,7 +8,7 @@ export default (sequelize, DataTypes) => {
   
     Channel.associate = (models) => {
       Channel.belongsToMany(models.user, {
-        through: 'member',
+        through: models.member,
         foreignKey: 'channel_id',
       });
       Channel.belongsTo(models.user, {

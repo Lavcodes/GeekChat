@@ -21,6 +21,38 @@ export default{
     //),
         },
     Mutation: {
+        addChannelMember:requiresAuth.createResolver( async (parent, { email, channel_id }, { models, user }) => {
+            try {
+              const channelPromise = models.channel.findOne({ where: { id: channel_id } }, { raw: true });
+              const userToAddPromise = models.user.findOne({ where: { email } }, { raw: true });
+              const [channel, userToAdd] = await Promise.all([channelPromise, userToAddPromise]);
+              if (channel.admin !== user.id) {
+                return {
+                  ok: false,
+                  errors: [{ path: 'email', message: 'You need to be admin to add members to the team.' }],
+                };
+              }
+              if (!userToAdd) {
+                return {
+                  ok: false,
+                  errors: [{ path: 'email', message: 'Could not find user with this email' }],
+                };
+              }
+              await models.member.create({ userId: userToAdd.id, channel_id });
+              return {
+                ok: true,
+              };
+            } catch (err) {
+              console.log(err);
+              return {
+                ok: false,
+                errors: formatErr(err, models),
+              };
+            }
+          }),
+
+
+
         createChannel : requiresAuth.createResolver(async (parent, args, {models, user}) => {
             try{
                 if(user==null) console.log("prob");

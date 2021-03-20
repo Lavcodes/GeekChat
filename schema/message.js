@@ -4,7 +4,7 @@ type Message {
     id:Int!
     text: String!
     user: User!
-    channel: Channel
+    channel: Channel!
   }
   type Query{
       getMessage(id: Int!) : Message!
