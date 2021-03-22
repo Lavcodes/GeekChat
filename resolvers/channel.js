@@ -12,13 +12,6 @@ const formatErr = (e, models)=> {
 export default{
     Query: {
         getChannel : (parent, {id}, {models}) => models.channel.findOne({where :{id} }),
-        allChannels : //requiresAuth.createResolver(
-
-            async(parent, args, { models, user }) => models.channel.findAll({where:{
-                admin: user.id
-            }}, {raw:true}),
-
-    //),
         },
     Mutation: {
         addChannelMember:requiresAuth.createResolver( async (parent, { email, channel_id }, { models, user }) => {
@@ -26,7 +19,9 @@ export default{
               const channelPromise = models.channel.findOne({ where: { id: channel_id } }, { raw: true });
               const userToAddPromise = models.user.findOne({ where: { email } }, { raw: true });
               const [channel, userToAdd] = await Promise.all([channelPromise, userToAddPromise]);
-              if (channel.admin !== user.id) {
+              const member= await models.member.findOne({where:{channel_id:channel.id, userId: user.id }});
+              console.log(member);
+              if (!member.admin) {
                 return {
                   ok: false,
                   errors: [{ path: 'email', message: 'You need to be admin to add members to the team.' }],
@@ -55,9 +50,14 @@ export default{
 
         createChannel : requiresAuth.createResolver(async (parent, args, {models, user}) => {
             try{
-                if(user==null) console.log("prob");
+              const response = await models.sequelize.transaction(async ()=>{
+              //  if(user==null) console.log("prob");
                 //console.log(user.id);
-                await models.channel.create({...args, admin: user.id});
+                const newchannel = await models.channel.create({...args});
+                await models.member.create({channel_id: newchannel.id, userId: user.id, admin:true});
+                return newchannel;
+              });
+                
                 return {
                     ok:true,
 

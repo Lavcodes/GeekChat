@@ -19,9 +19,11 @@ export default{
       },
 
     Message: {
-        user: async ({ user_id }, args, { models }) =>{
-            console.log("i'm here");
-            return models.user.findOne({ where: { id: user_id } });
+        user: async ({ user, user_id }, args, { models}) =>{
+            
+            const writer= await models.user.findOne({ where: { id: user_id } });
+            if(!writer) console.log('gadbad');
+            return writer;
         },
         
       },

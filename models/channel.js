@@ -11,9 +11,9 @@ export default (sequelize, DataTypes) => {
         through: models.member,
         foreignKey: 'channel_id',
       });
-      Channel.belongsTo(models.user, {
+      /*hannel.belongsTo(models.user, {
         foreignKey: 'admin',
-      });
+      });*/
     
   };
   

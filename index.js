@@ -63,12 +63,12 @@ const server = new ApolloServer({
     context :async ({req, connection}) => {
       if(req)
       return{models,
-        user:req.user,
+       user:req.user,
       /*user:{
         id:req.user.id,
       },*/
-     /* user:{
-        id:2,
+     /*user:{
+        id:1,
       },*/
        SECRET,
        SECRET2,
@@ -90,10 +90,37 @@ const server = new ApolloServer({
     },
     subscriptions: {
       path: '/subscriptions',
-      onConnect: (connectionParams, webSocket, context) => {
+      onConnect: async ({ token, refreshToken }, webSocket) => {
+        if (token && refreshToken) {
+          let user = null;
+          try {
+            const payload = jwt.verify(token, SECRET);
+            user = payload.user;
+          } catch (err) {
+            const newTokens = await refreshTokens(token, refreshToken, models, SECRET, SECRET2);
+            user = newTokens.user;
+          }
+          if (!user) {
+            throw new Error('Invalid auth tokens');
+          }
+
+          const member = await models.member.findOne({ where: { channel_id: 1, userId: user.id } });
+
+          if (!member) {
+            throw new Error('Missing auth tokens!');
+          }
+
+          return true;
+        }
+
+        throw new Error('Missing auth tokens!');
+      },
+      /*(connectionParams, webSocket, context) => {
         console.log('client connected');
         
-      },
+      },*/
+      /**/
+
       onDisconnect: (webSocket, context) => {
         console.log('Client disconnected')
       },

@@ -52,8 +52,9 @@ export default (sequelize, DataTypes) => {
    User.associate = (models) => {
       User.belongsToMany(models.channel, {
         through: models.member,
-        foreignKey: 'user_id',
-      });
+        foreignKey: 'userId',
+       
+        });
       User.hasMany(models.channel);
     };
   
