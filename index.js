@@ -1,15 +1,22 @@
 import express from 'express';
 import { ApolloServer, gql, makeExecutableSchema } from 'apollo-server-express'; 
-
-import models from './models';
-import {sequelize} from './models';
-import {refreshTokens} from './auth';
 import { loadFilesSync } from '@graphql-tools/load-files';
 import { mergeTypeDefs, mergeResolvers } from '@graphql-tools/merge';
 import cors from 'cors';
 import jwt from 'jsonwebtoken';
+import { execute, subscribe } from 'graphql';
+import { SubscriptionServer } from 'subscriptions-transport-ws';
 
-const path= require('path');
+
+
+import models from './models';
+import {sequelize} from './models';
+import {refreshTokens} from './auth';
+
+
+
+const path = require('path');
+const http = require('http');
 
 const types=loadFilesSync(path.join(__dirname, './schema'));
 const typeDefs= mergeTypeDefs(types);
@@ -53,24 +60,57 @@ app.use(addUser);
 const server = new ApolloServer({
     typeDefs,
     resolvers,
-    context :async ({req}) => {
+    context :async ({req, connection}) => {
+      if(req)
       return{models,
-      user:req.user,
-       /*user:{
-         id:1,
-       },*/
+        user:req.user,
+      /*user:{
+        id:req.user.id,
+      },*/
+     /* user:{
+        id:2,
+      },*/
        SECRET,
        SECRET2,
       };
+      else if(connection)
+        return {
+          models,
+        user:connection.user,
+      /*user:{
+        id:req.user.id,
+      },*/
+     /* user:{
+        id:2,
+      },*/
+       SECRET,
+       SECRET2,
+        };
+      
+    },
+    subscriptions: {
+      path: '/subscriptions',
+      onConnect: (connectionParams, webSocket, context) => {
+        console.log('client connected');
+        
+      },
+      onDisconnect: (webSocket, context) => {
+        console.log('Client disconnected')
+      },
     },
 });
+  const httpServer = http.createServer(app);
+
+  
 
   server.applyMiddleware({ app });
+  server.installSubscriptionHandlers(httpServer);
   //app.use(addUser);
  
 sequelize.sync().then(()=>{
     console.log("im done");
-    app.listen(8081);
+    httpServer.listen(8081);
+  //  app.listen(8081);
 });
 
 //schema.applyMiddleware({app});

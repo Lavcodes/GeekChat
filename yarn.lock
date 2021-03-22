@@ -5322,7 +5322,7 @@
   "resolved" "https://registry.npmjs.org/strip-json-comments/-/strip-json-comments-2.0.1.tgz"
   "version" "2.0.1"
 
-"subscriptions-transport-ws@^0.9.11", "subscriptions-transport-ws@^0.9.16":
+"subscriptions-transport-ws@^0.9.11", "subscriptions-transport-ws@^0.9.16", "subscriptions-transport-ws@^0.9.18":
   "integrity" "sha512-tztzcBTNoEbuErsVQpTN2xUNN/efAZXyCyL5m3x4t6SKrEiTL2N8SaKWBFWM4u56pL79ULif3zjyeq+oV+nOaA=="
   "resolved" "https://registry.npmjs.org/subscriptions-transport-ws/-/subscriptions-transport-ws-0.9.18.tgz"
   "version" "0.9.18"
