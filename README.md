@@ -27,7 +27,7 @@ The server will start on **http://localhost:8081** with the Graphql playground o
 
 ### Frontend 
 
-[Client Repository] (https://github.com/Lavcodes/GeekChat-Client)
+[Client Repository](https://github.com/Lavcodes/GeekChat-Client)
 
 After cloning the repository, 
 
