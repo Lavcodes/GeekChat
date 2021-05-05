@@ -8,7 +8,7 @@ import { execute, subscribe } from 'graphql';
 import { SubscriptionServer } from 'subscriptions-transport-ws';
 
 
-
+import formidable from 'formidable';
 import models from './models';
 import {sequelize} from './models';
 import {refreshTokens} from './auth';
@@ -53,9 +53,9 @@ const addUser = async (req, res, next) => {
   next();
 };
 
+//app.use(fileMiddleware);
 
 app.use(addUser);
-
 
 const server = new ApolloServer({
     typeDefs,
@@ -63,13 +63,13 @@ const server = new ApolloServer({
     context :async ({req, connection}) => {
       if(req)
       return{models,
-       user:req.user,
+      // user:req.user,
       /*user:{
         id:req.user.id,
       },*/
-     /*user:{
+     user:{
         id:1,
-      },*/
+      },
        SECRET,
        SECRET2,
       };
@@ -90,35 +90,11 @@ const server = new ApolloServer({
     },
     subscriptions: {
       path: '/subscriptions',
-      onConnect: async ({ token, refreshToken }, webSocket) => {
-        if (token && refreshToken) {
-          let user = null;
-          try {
-            const payload = jwt.verify(token, SECRET);
-            user = payload.user;
-          } catch (err) {
-            const newTokens = await refreshTokens(token, refreshToken, models, SECRET, SECRET2);
-            user = newTokens.user;
-          }
-          if (!user) {
-            throw new Error('Invalid auth tokens');
-          }
-
-          const member = await models.member.findOne({ where: { channel_id: 1, userId: user.id } });
-
-          if (!member) {
-            throw new Error('Missing auth tokens!');
-          }
-
-          return true;
-        }
-
-        throw new Error('Missing auth tokens!');
-      },
-      /*(connectionParams, webSocket, context) => {
+      onConnect: 
+      (connectionParams, webSocket, context) => {
         console.log('client connected');
         
-      },*/
+      },
       /**/
 
       onDisconnect: (webSocket, context) => {
@@ -131,13 +107,14 @@ const server = new ApolloServer({
   
 
   server.applyMiddleware({ app });
+ 
   server.installSubscriptionHandlers(httpServer);
   //app.use(addUser);
  
 sequelize.sync().then(()=>{
     console.log("im done");
     httpServer.listen(8081);
-  //  app.listen(8081);
+   //app.listen(8081);
 });
 
 //schema.applyMiddleware({app});
